@@ -170,6 +170,21 @@ zrok will generate a **secure public URL**.
 * Your mobile-hosted cloud storage is now accessible globally
 * All data continues to reside only on your phone
 
+> 🔁 **Keep-Alive Note (Important)**
+>
+> To ensure the server stays active:
+>
+> * Create a **new session/tab in Termux**
+> * Run a `curl` request to the **zrok public URL every 10 seconds**
+>
+> Example:
+>
+> ```bash
+> while true; do curl <PUBLIC_ZROK_URL>; sleep 10; done
+> ```
+>
+> This prevents the tunnel or session from becoming idle and helps keep the server reachable.
+
 ---
 
 ## 📚 Future Enhancements
