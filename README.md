@@ -25,7 +25,7 @@ A lightweight **personal cloud storage system** that runs directly on an **Andro
 ## 🛠️ Tech Stack
 
 * **Android App (Local Server)** – The app itself creates and runs the local server on the mobile device
-* **Termux** (from F-Droid) – Used **only for tunneling purposes**, not for hosting the server
+* **Termux** (from F‑Droid) – Used **only for tunneling purposes**, not for hosting the server
 * **zrok** – Secure tunneling to expose the app’s local server to the internet
 
 ---
@@ -44,7 +44,7 @@ A lightweight **personal cloud storage system** that runs directly on an **Andro
 
 > 🔔 **Remote Access Architecture**
 >
-> The local server is **entirely handled by the Android app itself**. **Termux (installed via F-Droid)** is used **only for running zrok**, which securely tunnels the app’s local server to the public internet. This design keeps the app independent while still enabling global access to your private cloud storage.
+> The local server is **entirely handled by the Android app itself**. **Termux (installed via F‑Droid)** is used **only for running zrok**, which securely tunnels the app’s local server to the public internet. This design keeps the app independent while still enabling global access to your private cloud storage.
 
 ---
 
@@ -63,6 +63,112 @@ A lightweight **personal cloud storage system** that runs directly on an **Andro
 * Backup server for important files
 * File sharing between personal devices
 * Learning project for mobile self‑hosting
+
+---
+
+## 🌐 Steps to Make Personal Storage Publicly Accessible
+
+Follow these steps to securely expose your personal cloud storage to the internet.
+
+---
+
+### 1️⃣ Install Termux
+
+1. Open **F-Droid** (recommended source)
+2. Search for **Termux** and install it
+3. Launch Termux and allow storage permission when prompted
+
+> ⚠️ Play Store versions of Termux are deprecated. Always use F-Droid.
+
+---
+
+### 2️⃣ Install Ubuntu Inside Termux
+
+Run the following commands **inside Termux**:
+
+```bash
+pkg update && pkg upgrade -y
+pkg install proot-distro -y
+proot-distro install ubuntu
+proot-distro login ubuntu
+```
+
+Once logged in, you will be inside the Ubuntu environment.
+
+---
+
+### 3️⃣ Install and Configure zrok
+
+Run the following commands **inside Ubuntu**:
+
+```bash
+apt update && apt upgrade -y
+apt install curl unzip -y
+```
+
+Download and install zrok:
+
+```bash
+curl -s https://get.openziti.io/install.bash | bash
+source ~/.bashrc
+```
+
+Verify installation:
+
+```bash
+zrok version
+```
+
+Authenticate and enable zrok (one-time setup):
+
+```bash
+zrok enable
+```
+
+Follow the browser-based authentication and complete device enrollment.
+
+---
+
+### 4️⃣ Run the Android App Local Server
+
+1. Open your **Personal Cloud Storage app**
+2. Start the local server from within the app
+3. Note the **local server URL** shown by the app (example: `http://192.168.1.1:8080`)
+
+> 📝 **Local Access Note**
+> The web interface can be accessed **locally on the same network** using the link provided by the app. Any device connected to the same Wi‑Fi network can open this URL in a browser to access the storage locally.
+
+The app now serves files locally on your device.
+
+---
+
+### 5️⃣ Share the Local Server Using zrok
+
+Assuming your app provides a local server like:
+
+```
+http://192.168.1.1:8080
+```
+
+[http://localhost:PORT](http://localhost:PORT)
+
+````
+
+Run the following command **inside Ubuntu**:
+
+```bash
+zrok share public localhost:PORT
+````
+
+zrok will generate a **secure public URL**.
+
+---
+
+### 6️⃣ Access Your Personal Cloud from Anywhere
+
+* Open the zrok-generated public URL in any browser
+* Your mobile-hosted cloud storage is now accessible globally
+* All data continues to reside only on your phone
 
 ---
 
